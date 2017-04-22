@@ -1,0 +1,2 @@
+MY_FLUME_HOME=$(cd $(dirname $0)/..; pwd)
+JAVA_OPTS="-Xmx768m -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintClassHistoclam -XX:+PrintTenuringDistribution -XX:+PrintGCApplicationStoppedTime -Xloggc:/var/log/test-ng/gc.log -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/var/log/test-ng/ -javaagent:${MY_FLUME_HOME}/lib/jmx-fixed-port-1.0.0.jar=7120 -javaagent:${MY_FLUME_HOME}/lib/zapcat-{{ test_zapcat_version }}.jar -javaagent:${MY_FLUME_HOME}/lib/iostat-monitor-0.1.0.0.jar=${MY_FLUME_HOME}"

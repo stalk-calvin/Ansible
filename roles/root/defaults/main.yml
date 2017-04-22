@@ -1,0 +1,12 @@
+---
+# file: roles/testagent/defaults/main.yml
+
+# Packages
+#
+testagent_version: 1.6.0-cl4
+test_interceptor_version: 12345
+test_interceptor_version_detail: 12345
+release_type: releases
+
+test_zapcat_version: 1.2.9-cl
+test_source_spool_dir: "/data/log-to-test-spool/"

@@ -1,0 +1,41 @@
+#
+# Configure the properties of the channels used to connect the source to sink
+#
+importer.channels.file_channel.type           = file
+importer.channels.file_channel.checkpointDir  = /data1/log-to-test/data/log-to-test-file-channel/checkpoint
+importer.channels.file_channel.dataDirs       = /data1/log-to-test/data/log-to-test-file-channel/data
+#
+#  Configured the sources
+#
+importer.sources.spool_dir_source.type                          = spooldir
+#importer.sources.spool_dir_source.deletePolicy                 = immediate #uncomment if you do not want to save .COMPLETED spooled files.
+importer.sources.spool_dir_source.spoolDir                      = {{ test_source_spool_dir }}
+importer.sources.spool_dir_source.bufferMaxLineLength           = 200000
+importer.sources.spool_dir_source.channels                      = file_channel
+importer.sources.spool_dir_source.selector.type                 = replicating
+importer.sources.spool_dir_source.interceptors                  = log_to_test
+ 
+# this is the interceptor that will turn the log entry into a SAL event.
+importer.sources.spool_dir_source.interceptors.log_to_test.type  = service_audit_log.test.importer.ImporterInterceptor$Builder
+ 
+#
+# Configure the sinks (pointing to SAL collectors)
+#
+{% for sink in test_sinks %}
+importer.sinks.{{ sink.name }}.type      = {{ sink.type }}
+importer.sinks.{{ sink.name }}.hostname  = {{ sink.hostname }}
+importer.sinks.{{ sink.name }}.channel   = {{ sink.channel }}
+importer.sinks.{{ sink.name }}.port      = {{ sink.port }}
+
+{% endfor %}
+{% if test_sinks|length > 1 %}
+importer.sinkcloups.serviceAuditLogv2SinkGroup.sinks          = {{ test_sinks|map(attribute='name')| list | join(" ") }}
+importer.sinkcloups.serviceAuditLogv2SinkGroup.processor.type = load_balance
+{% endif %}
+ 
+#
+# Wire the agent up so that it is active
+#
+importer.sources  = spool_dir_source
+importer.sinks    = test_sink_1 test_sink_2
+importer.channels = file_channel

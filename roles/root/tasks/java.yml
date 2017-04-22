@@ -1,0 +1,32 @@
+---
+
+- name: java installed
+  yum: >
+    name={{ testagent_java_version }}
+    state=present
+  sudo: True
+  tags:
+   - install
+   - java
+  when: 'ansible_distribution == "CentOS" and ansible_distribution_major_version == "6"'
+
+- name: required file /root/jdk-8u66-linux-x64.rpm 
+  copy: >
+    src=jdk-8u66-linux-x64.rpm
+    dest=/root/jdk-8u66-linux-x64.rpm
+    owner=root
+    cloup=root
+    mode=644
+  sudo: True
+  when: 'ansible_distribution == "CentOS" and ansible_distribution_major_version == "5"'
+    
+- name: jdk-8u66-linux-x64 installed
+  yum: >
+    name=/root/jdk-8u66-linux-x64.rpm
+    state=present
+    disable_gpg_check=yes
+  sudo: True
+  tags:
+   - install
+   - java
+  when: 'ansible_distribution == "CentOS" and ansible_distribution_major_version == "5"'

@@ -1,0 +1,33 @@
+#
+# Configure the properties of the channels used to connect the source to sink
+#
+importer.channels.file_channel.type           = file
+importer.channels.file_channel.checkpointDir  = /data1/log-to-test/data/log-to-test-file-channel/checkpoint
+importer.channels.file_channel.dataDirs       = /data1/log-to-test/data/log-to-test-file-channel/data
+#
+#  Configured the sources
+#
+importer.sources.spool_dir_source.type                          = spooldir
+#importer.sources.spool_dir_source.deletePolicy                 = immediate #uncomment if you do not want to save .COMPLETED spooled files.
+importer.sources.spool_dir_source.spoolDir                      = /data1/log-to-test/data/log-to-test-spool/
+importer.sources.spool_dir_source.bufferMaxLineLength           = 200000
+importer.sources.spool_dir_source.channels                      = file_channel
+importer.sources.spool_dir_source.selector.type                 = replicating
+importer.sources.spool_dir_source.interceptors                  = log_to_test
+
+# this is the interceptor that will turn the log entry into a SAL event.
+importer.sources.spool_dir_source.interceptors.log_to_test.type  = service_audit_log.test.importer.ImporterInterceptor$Builder
+
+#
+# Configure the sinks (pointing to SAL collectors)
+#
+importer.sinks.null_sink.type = null
+importer.sinks.null_sink.channel = file_channel
+
+#
+# Wire the agent up so that it is active
+#
+importer.sources  = spool_dir_source
+importer.channels = file_channel
+importer.sinks    = null_sink
+

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="DEBUG">
+  <appenders>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </Console>
+    <RollingFile name="HumanRollingFile" fileName="/var/log/test-ng/test.log"
+       filePattern="/var/log/test-ng/test.%d{yyyyMMdd}.log">
+       <!-- date level [thread] logger message exception newline  -->
+       <PatternLayout pattern="%d %5p [%t] %25c{1.} %m%xEx%n"/>
+       <Policies>
+         <TimeBasedTriggeringPolicy />
+       </Policies>
+       <DefaultRolloverStrategy max="20"/>
+    </RollingFile>
+  </appenders>
+  <loggers>
+    <!-- Loggers to filter out various class paths -->
+    <logger name="org.hibernate.engine.loading.LoadContexts" level="error">
+    </logger>
+    <logger name="org.apache.test.lifecycle" level="info">
+    </logger>
+    <logger name="org.jboss" level="warn">
+    </logger>
+    <logger name="org.mortbay" level="info">
+    </logger>
+    <logger name="org.apache.avro.ipc.NettyTransceiver" level="warn">
+    </logger>
+    <logger name="org.apache.hadoop" level="info">
+    </logger>
+    <!-- This logger spews a lot of uninteresting information at debug level so make the user override the setting
+         specifically -->
+    <logger name="org.apache.test.interceptor.RegexExtractorInterceptor" level="info">
+    </logger>
+    <root level="info">
+      <appender-ref ref="HumanRollingFile"/>
+    </root>
+  </loggers>
+</configuration>

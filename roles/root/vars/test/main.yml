@@ -1,0 +1,11 @@
+test_sinks:
+  - name: "test_sink_1"
+    type: "avro"
+    hostname: "all-test-calvin.net"
+    channel: "file_channel"
+    port: "7858"
+  - name: "test_sink_2"
+    type: "avro"
+    hostname: "all-test-dev-calvin.net"
+    channel: "file_channel"
+    port: "7858"

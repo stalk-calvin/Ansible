@@ -1,0 +1,28 @@
+- name: add header, clickjacking /etc/httpd/conf/httpd.conf
+  lineinfile: >
+    dest=/etc/httpd/conf/httpd.conf
+    line="Header always append X-Frame-Options SAMEORIGIN"
+    insertafter='^Header append P3P.*'
+    state=present
+  sudo: True
+
+- name: add header, HSTS /etc/httpd/conf/httpd.conf
+  lineinfile: >
+    dest=/etc/httpd/conf/httpd.conf
+    line="Header always set Strict-Transport-Security \"max-age=31536000; includeSubDomains; preload\""
+    insertafter='^Header always append X-Frame-Options.*'
+    state=present
+  sudo: True
+
+- name: add header, Public-Key-Pins
+  lineinfile: >
+    dest=/etc/httpd/conf/httpd.conf
+    line="Header always set Public-Key-Pins \"pin-sha256=\\\"4/JHzAn3mCcTO3K/DwdCzLi7GFDAZQfu4GYK/uhFJ1k=\\\"; max-age=5184000; includeSubDomains\""
+    insertafter='^Header always set Strict-Transport-Security.*'
+    state=present
+  sudo: True
+
+# Restart Apache
+- name: restart httpd
+  service: name=httpd state=restarted
+  sudo: True

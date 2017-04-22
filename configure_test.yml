@@ -1,0 +1,20 @@
+---
+# file: configure_test.yml
+
+# This playbook requires that an "environment" be specified.
+# That environment should be stg1, prod, test, etc.
+# Environment-specific variables will be included from 
+# roles/<rolename>/vars/{{ env }}/main.yml
+
+- hosts: 127.0.0.1
+  connection: local
+  tasks: 
+    - fail: msg="{{ env }} is not defined"
+      when: env is not defined
+      
+    - fail: msg="{{ location }} is not defined"
+      when: env is not defined
+
+- hosts: test-machines
+  roles:
+    - root

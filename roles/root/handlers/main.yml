@@ -1,0 +1,8 @@
+---
+# file: roles/feedspool/handlers/main.yml
+
+- name: restart apache
+  service: >
+    name=httpd
+    state=restarted
+  sudo: True
